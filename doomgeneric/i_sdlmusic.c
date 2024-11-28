@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 #include "config.h"
 #include "doomtype.h"
@@ -928,19 +928,19 @@ static boolean I_SDL_InitMusic(void)
     }
     else
     {
-        if (SDL_Init(SDL_INIT_AUDIO) < 0)
+        if (SDL_Init(SDL_INIT_AUDIO))
         {
             fprintf(stderr, "Unable to set up sound.\n");
         }
-        else if (Mix_OpenAudio(snd_samplerate, AUDIO_S16SYS, 2, 1024) < 0)
+        else if (Mix_OpenAudio(0, NULL))
         {
             fprintf(stderr, "Error initializing SDL_mixer: %s\n",
-                    Mix_GetError());
+                    SDL_GetError());
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
         }
         else
         {
-            SDL_PauseAudio(0);
+            SDL_PauseAudioDevice(0);
 
             sdl_was_initialized = true;
             music_initialized = true;
@@ -955,10 +955,10 @@ static boolean I_SDL_InitMusic(void)
     // If snd_musiccmd is set, we need to call Mix_SetMusicCMD to
     // configure an external music playback program.
 
-    if (strlen(snd_musiccmd) > 0)
-    {
-        Mix_SetMusicCMD(snd_musiccmd);
-    }
+    // if (strlen(snd_musiccmd) > 0)
+    // {
+    //     Mix_SetMusicCMD(snd_musiccmd);
+    // }
 
     // Register an effect function to track the music position.
     Mix_RegisterEffect(MIX_CHANNEL_POST, TrackPositionCallback, NULL, NULL);
@@ -1036,9 +1036,7 @@ static void I_SDL_PlaySong(void *handle, boolean looping)
     if (playing_substitute && file_metadata.valid)
     {
         loops = 1;
-        SDL_LockAudio();
         current_track_pos = 0;  // start of track
-        SDL_UnlockAudio();
     }
 
     Mix_PlayMusic(current_track_music, loops);
@@ -1154,7 +1152,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
             // Fall through and play MIDI normally, but print an error
             // message.
             fprintf(stderr, "Failed to load substitute music file: %s: %s\n",
-                    filename, Mix_GetError());
+                    filename, SDL_GetError());
         }
         else
         {
@@ -1192,7 +1190,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
     {
         // Failed to load
 
-        fprintf(stderr, "Error loading midi: %s\n", Mix_GetError());
+        fprintf(stderr, "Error loading midi: %s\n", SDL_GetError());
     }
 
     // Remove the temporary MIDI file; however, when using an external
@@ -1229,9 +1227,7 @@ static double GetMusicPosition(void)
 
     Mix_QuerySpec(&freq, NULL, NULL);
 
-    SDL_LockAudio();
     music_pos = current_track_pos;
-    SDL_UnlockAudio();
 
     return (double) music_pos / freq;
 }
@@ -1252,9 +1248,7 @@ static void RestartCurrentTrack(void)
         }
 
         Mix_SetMusicPosition(start);
-        SDL_LockAudio();
         current_track_pos = file_metadata.start_time;
-        SDL_UnlockAudio();
     }
     else
     {

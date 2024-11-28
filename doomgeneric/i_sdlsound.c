@@ -24,8 +24,8 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 #ifdef HAVE_LIBSAMPLERATE
 #include <samplerate.h>
@@ -533,7 +533,6 @@ static boolean ExpandSoundData_SDL(sfxinfo_t *sfxinfo,
                                    int samplerate,
                                    int length)
 {
-    SDL_AudioCVT convertor;
     Mix_Chunk *chunk;
     uint32_t expanded_length;
  
@@ -978,15 +977,15 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
         channels_playing[i] = NULL;
     }
 
-    if (SDL_Init(SDL_INIT_AUDIO) < 0)
+    if (SDL_Init(SDL_INIT_AUDIO))
     {
         fprintf(stderr, "Unable to set up sound.\n");
         return false;
     }
 
-    if (Mix_OpenAudio(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize()) < 0)
+    if (Mix_OpenAudio(0, NULL))
     {
-        fprintf(stderr, "Error initialising SDL_mixer: %s\n", Mix_GetError());
+        fprintf(stderr, "Error initialising SDL_mixer: %s\n", SDL_GetError());
         return false;
     }
 
@@ -1020,15 +1019,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     // own drawbacks ...
 
     {
-        const SDL_version *mixer_version;
-        int v;
-
-        mixer_version = Mix_Linked_Version();
-        v = SDL_VERSIONNUM(mixer_version->major,
-                           mixer_version->minor,
-                           mixer_version->patch);
-
-        if (v <= SDL_VERSIONNUM(1, 2, 8))
+        if (SDL_MIXER_VERSION <= SDL_VERSIONNUM(1, 2, 8))
         {
             setpanning_workaround = true;
             fprintf(stderr, "\n"
@@ -1042,7 +1033,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
 
     Mix_AllocateChannels(NUM_CHANNELS);
 
-    SDL_PauseAudio(0);
+    SDL_PauseAudioDevice(0);
 
     sound_initialized = true;
 

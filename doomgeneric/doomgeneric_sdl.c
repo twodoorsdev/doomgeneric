@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #include <stdbool.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -113,19 +113,19 @@ static void addKeyToQueue(int pressed, unsigned int keyCode){
 static void handleKeyInput(){
   SDL_Event e;
   while (SDL_PollEvent(&e)){
-    if (e.type == SDL_QUIT){
+    if (e.type == SDL_EVENT_QUIT){
       puts("Quit requested");
       atexit(SDL_Quit);
       exit(1);
     }
-    if (e.type == SDL_KEYDOWN) {
+    if (e.type == SDL_EVENT_KEY_DOWN) {
       //KeySym sym = XKeycodeToKeysym(s_Display, e.xkey.keycode, 0);
       //printf("KeyPress:%d sym:%d\n", e.xkey.keycode, sym);
-      addKeyToQueue(1, e.key.keysym.sym);
-    } else if (e.type == SDL_KEYUP) {
+      addKeyToQueue(1, e.key.key);
+    } else if (e.type == SDL_EVENT_KEY_UP) {
       //KeySym sym = XKeycodeToKeysym(s_Display, e.xkey.keycode, 0);
       //printf("KeyRelease:%d sym:%d\n", e.xkey.keycode, sym);
-      addKeyToQueue(0, e.key.keysym.sym);
+      addKeyToQueue(0, e.key.key);
     }
   }
 }
@@ -133,21 +133,19 @@ static void handleKeyInput(){
 
 void DG_Init(){
   window = SDL_CreateWindow("DOOM",
-                            SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED,
                             DOOMGENERIC_RESX,
                             DOOMGENERIC_RESY,
-                            SDL_WINDOW_SHOWN
+                            SDL_WINDOW_METAL
                             );
 
   // Setup renderer
-  renderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
+  renderer =  SDL_CreateRenderer( window, NULL);
   // Clear winow
   SDL_RenderClear( renderer );
   // Render the rect to the screen
   SDL_RenderPresent(renderer);
 
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, DOOMGENERIC_RESX, DOOMGENERIC_RESY);
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_TARGET, DOOMGENERIC_RESX, DOOMGENERIC_RESY);
 }
 
 void DG_DrawFrame()
@@ -155,7 +153,7 @@ void DG_DrawFrame()
   SDL_UpdateTexture(texture, NULL, DG_ScreenBuffer, DOOMGENERIC_RESX*sizeof(uint32_t));
 
   SDL_RenderClear(renderer);
-  SDL_RenderCopy(renderer, texture, NULL, NULL);
+  SDL_RenderTexture(renderer, texture, NULL, NULL);
   SDL_RenderPresent(renderer);
 
   handleKeyInput();
