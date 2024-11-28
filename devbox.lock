@@ -1,134 +1,6 @@
 {
   "lockfile_version": "1",
   "packages": {
-    "SDL2@latest": {
-      "last_modified": "2024-11-16T04:25:12Z",
-      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#SDL2",
-      "source": "devbox-search",
-      "version": "2.30.6",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/43f4s323z71iylxbsmhnp210p5dg8zin-SDL2-2.30.6",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/kcyxkz371b4yi197vr1a1p0qsxfz4hbc-SDL2-2.30.6-dev"
-            }
-          ],
-          "store_path": "/nix/store/43f4s323z71iylxbsmhnp210p5dg8zin-SDL2-2.30.6"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/5r0slaqafrsjfiiikgi0lkg2v7lfw7xd-SDL2-2.30.6",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/isphrcc1gyisp9ybr2bmh4lywim6qlvg-SDL2-2.30.6-dev"
-            }
-          ],
-          "store_path": "/nix/store/5r0slaqafrsjfiiikgi0lkg2v7lfw7xd-SDL2-2.30.6"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/bw8vgqb0wfvfzrmk129pj8467lfxwm0r-SDL2-2.30.6",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/jwg5id9943kysi985c0hl1hhxiyjnym4-SDL2-2.30.6-dev"
-            }
-          ],
-          "store_path": "/nix/store/bw8vgqb0wfvfzrmk129pj8467lfxwm0r-SDL2-2.30.6"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/6a4s1c1d3xcl0i9lacj23ziz8l27zn5b-SDL2-2.30.6",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/hihf8s0lkxm3vsvblsrgd9ibsz03ayh0-SDL2-2.30.6-dev"
-            }
-          ],
-          "store_path": "/nix/store/6a4s1c1d3xcl0i9lacj23ziz8l27zn5b-SDL2-2.30.6"
-        }
-      }
-    },
-    "SDL2_mixer@latest": {
-      "last_modified": "2024-11-16T04:25:12Z",
-      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#SDL2_mixer",
-      "source": "devbox-search",
-      "version": "2.8.0",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/z6nv0jn3a8qvix5z4zbfrhqq4gf4wdhn-SDL2_mixer-2.8.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/p39pn1cnlrq4wygimihm5bzp4qqxc0zv-SDL2_mixer-2.8.0-dev"
-            }
-          ],
-          "store_path": "/nix/store/z6nv0jn3a8qvix5z4zbfrhqq4gf4wdhn-SDL2_mixer-2.8.0"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/6kxqwg1jcwdalrcmljjdfh4bazf9cl5p-SDL2_mixer-2.8.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/wv1yycaykvq6866n8ilwx5fzb4dbl66k-SDL2_mixer-2.8.0-dev"
-            }
-          ],
-          "store_path": "/nix/store/6kxqwg1jcwdalrcmljjdfh4bazf9cl5p-SDL2_mixer-2.8.0"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/8h6ny0b3ajji8rvm75nisslz54npbd81-SDL2_mixer-2.8.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/x0gi37kmcf78nqj5da1p5v42rlvi0anj-SDL2_mixer-2.8.0-dev"
-            }
-          ],
-          "store_path": "/nix/store/8h6ny0b3ajji8rvm75nisslz54npbd81-SDL2_mixer-2.8.0"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/5qqqgcg546xb6qlp76z31majrhgp6xkr-SDL2_mixer-2.8.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/hkz8k6c58nagd8fbvvs3ndsv9cx13ydf-SDL2_mixer-2.8.0-dev"
-            }
-          ],
-          "store_path": "/nix/store/5qqqgcg546xb6qlp76z31majrhgp6xkr-SDL2_mixer-2.8.0"
-        }
-      }
-    },
     "automake@latest": {
       "last_modified": "2024-11-16T04:25:12Z",
       "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#automake",
@@ -202,6 +74,110 @@
             }
           ],
           "store_path": "/nix/store/hnfkms9dykvh61nwdqydzmbgzzr5lwy0-clang-wrapper-18.1.8"
+        }
+      }
+    },
+    "cmake@latest": {
+      "last_modified": "2024-11-16T04:25:12Z",
+      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#cmake",
+      "source": "devbox-search",
+      "version": "3.30.5",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/aw70f6alsbf7cgn5qwqbpgd1w208i3v9-cmake-3.30.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/aw70f6alsbf7cgn5qwqbpgd1w208i3v9-cmake-3.30.5"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/71swssqfb007860ik9r7xgfb1i39dz7v-cmake-3.30.5",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/nlqn5rq3yx0qm0ibfn087bjxdb3y5vkn-cmake-3.30.5-debug"
+            }
+          ],
+          "store_path": "/nix/store/71swssqfb007860ik9r7xgfb1i39dz7v-cmake-3.30.5"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6paqqjczjfv8z2i6qr7gdfq21n0rbglr-cmake-3.30.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/6paqqjczjfv8z2i6qr7gdfq21n0rbglr-cmake-3.30.5"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4kb60dy0dg80ww8gh2av4by4vwn8l48k-cmake-3.30.5",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/f6wqljm9lncszmj652011lfjr5bpv6q1-cmake-3.30.5-debug"
+            }
+          ],
+          "store_path": "/nix/store/4kb60dy0dg80ww8gh2av4by4vwn8l48k-cmake-3.30.5"
+        }
+      }
+    },
+    "ninja@latest": {
+      "last_modified": "2024-11-16T04:25:12Z",
+      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#ninja",
+      "source": "devbox-search",
+      "version": "1.12.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hj6jb9m7rp59bgj7r2jpbqw9yip8fapr-ninja-1.12.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hj6jb9m7rp59bgj7r2jpbqw9yip8fapr-ninja-1.12.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bdp4i7s84b42yy3xki5dqxsgqfly0j6m-ninja-1.12.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/bdp4i7s84b42yy3xki5dqxsgqfly0j6m-ninja-1.12.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b1lsw3724b9s5rs56yq43l9q9kv51kd2-ninja-1.12.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/b1lsw3724b9s5rs56yq43l9q9kv51kd2-ninja-1.12.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/nwsn9hg84pf9rpy3bgdpssa2b6qc7w3p-ninja-1.12.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/nwsn9hg84pf9rpy3bgdpssa2b6qc7w3p-ninja-1.12.1"
         }
       }
     },

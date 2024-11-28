@@ -1,20 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.4/.schema/devbox.schema.json",
   "packages": [
-    "SDL2@latest",
-    "SDL2_mixer@latest",
     "clang@latest",
     "automake@latest",
-    "pkg-config@latest"
+    "pkg-config@latest",
+    "cmake@latest",
+    "ninja@latest"
   ],
   "shell": {
     "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
-    ],
-    "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
-      ]
-    }
+      "echo 'Welcome to devbox!' > /dev/null",
+      "[ ! -d SDL ] && git clone https://github.com/libsdl-org/SDL.git",
+      "cd SDL && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && cd ..",
+      "[ ! -d SDL_mixer ] && git clone https://github.com/libsdl-org/SDL_mixer.git",
+      "cd SDL_mixer && cmake -B build -DSDL3_DIR=$(pwd)/../SDL/build -DCMAKE_BUILD_TYPE=Release && cmake --build build && cd .."
+    ]
   }
 }

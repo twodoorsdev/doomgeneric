@@ -11,18 +11,19 @@ else
 	VB=@
 endif
 
-# Find SDL2 and SDL2_mixer pkg-config files in Nix store
-export PKG_CONFIG_PATH := $(shell find /nix/store -name 'SDL2.pc' -o -name 'SDL2_mixer.pc'   2>/dev/null | xargs dirname | tr '\n' ':')
+# Find SDL3 and SDL3_mixer in local build
+SDL_PATH = $(PWD)/../SDL
+SDL_BUILD = $(SDL_PATH)/build
+MIXER_PATH = $(PWD)/../SDL_mixer
+MIXER_BUILD = $(MIXER_PATH)/build
 
-SDL2_INCLUDE := $(shell find /nix/store -name 'SDL2' -type d -path '*/include/*' 2>/dev/null | head -n1)
-SDL2_MIXER_INCLUDE := $(shell dirname $(shell find /nix/store -name 'SDL_mixer.h' -path '*/include/*' 2>/dev/null | head -n1))
-
-SDL_CFLAGS = `sdl2-config --cflags` -I$(SDL2_INCLUDE) -I$(SDL2_MIXER_INCLUDE)
-SDL_LIBS = `sdl2-config --libs` -lSDL2_mixer
+# Point to the parent include directory since headers are in SDL3/ subdirectory
+SDL_CFLAGS = -I$(SDL_PATH)/include -I$(MIXER_PATH)/include
+SDL_LIBS = -L$(SDL_BUILD) -L$(MIXER_BUILD) -lSDL3 -lSDL3_mixer
 
 CC=clang  # gcc or g++
 CFLAGS+=-DFEATURE_SOUND $(SDL_CFLAGS)
-LDFLAGS+=$(NIX_LDFLAGS)
+LDFLAGS+=-Wl,-rpath,$(SDL_BUILD) -Wl,-rpath,$(MIXER_BUILD)
 LIBS+=-lm -lc $(SDL_LIBS)
 
 # subdirectory for objects
