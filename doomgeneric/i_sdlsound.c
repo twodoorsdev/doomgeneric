@@ -280,7 +280,7 @@ static void UnlockAllocatedSound(allocated_sound_t *snd)
     //printf("-- %s: Use count=%i\n", snd->sfxinfo->name, snd->use_count);
 }
 
-// When a sound stops, check if it is still playing.  If it is not, 
+// When a sound stops, check if it is still playing.  If it is not,
 // we can mark the sound data as CACHE to be freed back for other
 // means.
 
@@ -436,7 +436,7 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
 
     if (clipped > 0)
     {
-        fprintf(stderr, "Sound '%s': clipped %u samples (%0.2f %%)\n", 
+        fprintf(stderr, "Sound '%s': clipped %u samples (%0.2f %%)\n",
                         sfxinfo->name, clipped,
                         400.0 * clipped / chunk->alen);
     }
@@ -535,8 +535,8 @@ static boolean ExpandSoundData_SDL(sfxinfo_t *sfxinfo,
 {
     Mix_Chunk *chunk;
     uint32_t expanded_length;
- 
-    // Calculate the length of the expanded version of the sample.    
+
+    // Calculate the length of the expanded version of the sample.
 
     expanded_length = (uint32_t) ((((uint64_t) length) * mixer_freq) / samplerate);
 
@@ -688,7 +688,7 @@ static boolean CacheSFX(sfxinfo_t *sfxinfo)
 #endif
 
     // don't need the original lump any more
-  
+
     W_ReleaseLumpNum(lumpnum);
 
     return true;
@@ -870,7 +870,7 @@ static int I_SDL_StartSound(sfxinfo_t *sfxinfo, int channel, int vol, int sep)
     channels_playing[channel] = sfxinfo;
 
     // set separation, etc.
- 
+
     I_SDL_UpdateSoundParams(channel, vol, sep);
 
     return channel;
@@ -902,7 +902,7 @@ static boolean I_SDL_SoundIsPlaying(int handle)
     return Mix_Playing(handle);
 }
 
-// 
+//
 // Periodically called to update the sound system
 //
 
@@ -918,14 +918,14 @@ static void I_SDL_UpdateSound(void)
         {
             // Sound has finished playing on this channel,
             // but sound data has not been released to cache
-            
+
             ReleaseSoundOnChannel(i);
         }
     }
 }
 
 static void I_SDL_ShutdownSound(void)
-{    
+{
     if (!sound_initialized)
     {
         return;
@@ -971,21 +971,34 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     use_sfx_prefix = _use_sfx_prefix;
 
     // No sounds yet
-
     for (i=0; i<NUM_CHANNELS; ++i)
     {
         channels_playing[i] = NULL;
     }
 
-    if (SDL_Init(SDL_INIT_AUDIO))
+    // Initialize SDL audio subsystem first
+    if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
     {
-        fprintf(stderr, "Unable to set up sound.\n");
+        fprintf(stderr, "Unable to set up sound: %s\n", SDL_GetError());
         return false;
     }
 
-    if (Mix_OpenAudio(0, NULL))
-    {
-        fprintf(stderr, "Error initialising SDL_mixer: %s\n", SDL_GetError());
+    // Initialize SDL_mixer with default device
+    SDL_AudioSpec desired;
+    desired.freq = MIX_DEFAULT_FREQUENCY;
+    desired.format = MIX_DEFAULT_FORMAT;
+    desired.channels = MIX_DEFAULT_CHANNELS;
+    // desired.samples = 2048;  // Buffer size
+
+    // First initialize SDL_mixer
+    if (Mix_Init(MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD) == 0) {
+        fprintf(stderr, "Mix_Init failed: %s\n", SDL_GetError());
+        // Continue anyway, as these are just format support flags
+    }
+
+    // Then open the audio device
+    if (!Mix_OpenAudio(0, &desired)) {
+        fprintf(stderr, "Mix_OpenAudio failed: %s\n", SDL_GetError());
         return false;
     }
 
@@ -1013,34 +1026,21 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     }
 #endif
 
-    // SDL_mixer version 1.2.8 and earlier has a bug in the Mix_SetPanning
-    // function that can cause the game to lock up.  If we're using an old
-    // version, we need to apply a workaround.  But the workaround has its
-    // own drawbacks ...
-
-    {
-        if (SDL_MIXER_VERSION <= SDL_VERSIONNUM(1, 2, 8))
-        {
-            setpanning_workaround = true;
-            fprintf(stderr, "\n"
-              "ATTENTION: You are using an old version of SDL_mixer!\n"
-              "           This version has a bug that may cause "
-                          "your sound to stutter.\n"
-              "           Please upgrade to a newer version!\n"
-              "\n");
-        }
-    }
-
+    // Allocate enough channels for sound effects
     Mix_AllocateChannels(NUM_CHANNELS);
 
-    SDL_PauseAudioDevice(0);
+    // Initialize volume to max for all channels
+    Mix_Volume(-1, MIX_MAX_VOLUME);
+
+    // Set up the post-mix callback
+    Mix_SetPostMix(NULL, NULL);
 
     sound_initialized = true;
 
     return true;
 }
 
-static snddevice_t sound_sdl_devices[] = 
+static snddevice_t sound_sdl_devices[] =
 {
     SNDDEVICE_SB,
     SNDDEVICE_PAS,
@@ -1050,7 +1050,7 @@ static snddevice_t sound_sdl_devices[] =
     SNDDEVICE_AWE32,
 };
 
-sound_module_t DG_sound_module = 
+sound_module_t DG_sound_module =
 {
     sound_sdl_devices,
     arrlen(sound_sdl_devices),
