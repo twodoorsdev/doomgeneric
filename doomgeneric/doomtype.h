@@ -62,21 +62,18 @@
 
 #include <inttypes.h>
 
+// Define boolean type before any other includes
 #ifdef __cplusplus
-
-// Use builtin bool type with C++.
-
 typedef bool boolean;
-
 #else
-
-typedef enum 
-{
-    false	= 0,
-    true	= 1,
-	undef	= 0xFFFFFFFF
+#ifndef boolean
+typedef enum {
+    boolean_false = 0,
+    boolean_true = 1
 } boolean;
-
+#define false boolean_false
+#define true boolean_true
+#endif
 #endif
 
 typedef uint8_t byte;
