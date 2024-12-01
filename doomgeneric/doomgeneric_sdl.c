@@ -201,34 +201,36 @@ int main(int argc, char **argv)
 {
     CFBundleRef mb = CFBundleGetMainBundle();
     CFURLRef ur = CFBundleCopyResourceURL(mb, CFSTR("doom1"), CFSTR("wad"), NULL);
-//    CFStringRef imagePath = CFURLCopyFileSystemPath(ur, kCFURLPOSIXPathStyle);
-    
-    CFShow(ur);
 
-//    // Now convert to a C-string
-//    CFStringEncoding encoding = kCFStringEncodingUTF8;
-//    CFIndex length = CFStringGetLength(imagePath);
-//    CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, encoding);
-//
-//    char *filename = (char *)malloc(maxSize + 1); // +1 for \0
+    // Convert CFURL to C string path
+    CFStringRef pathString = CFURLCopyFileSystemPath(ur, kCFURLPOSIXPathStyle);
+    CFIndex length = CFStringGetLength(pathString);
+    CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
+    char *wadPath = (char *)malloc(maxSize + 1);
+    CFStringGetCString(pathString, wadPath, maxSize + 1, kCFStringEncodingUTF8);
 
-    // Technically this can fail, but it really, really can't.
-//    CFStringGetCString(imagePath, filename, maxSize, encoding);
-//
-//    printf( "\n we did it! .. %s \n", filename );
+    // Calculate new argument count
+    int newArgc = 3;  // program name + -iwad + wadPath
 
-    // Cleanup
-//    free(filename); filename = NULL;
-//    CFRelease(imagePath); imagePath = NULL;
-    CFRelease(ur); ur = NULL;
-    
-    doomgeneric_Create(argc, argv);
+    // Create new argv array
+    char **newArgv = (char **)malloc(newArgc * sizeof(char *));
+    newArgv[0] = argv[0];  // Keep original program name
+    newArgv[1] = "-iwad";  // Add -iwad flag
+    newArgv[2] = wadPath;  // Add the WAD path
+
+    // Call doom with new arguments
+    doomgeneric_Create(newArgc, newArgv);
 
     for (int i = 0; ; i++)
     {
         doomgeneric_Tick();
     }
-    
+
+    // Cleanup
+    CFRelease(pathString);
+    CFRelease(ur);
+    free(wadPath);
+    free(newArgv);
 
     return 0;
 }
