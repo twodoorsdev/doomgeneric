@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include <stdbool.h>
+#include <SDL3/SDL_main.h>
 #include <SDL3/SDL.h>
 
 #include <CoreFoundation/CoreFoundation.h>
