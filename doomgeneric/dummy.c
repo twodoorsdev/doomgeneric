@@ -40,13 +40,13 @@ boolean drone = false;
  *  public functions                                                   *
  *---------------------------------------------------------------------*/
 
-#ifndef FEATURE_SOUND
+// #ifndef FEATURE_SOUND
 
-void I_InitTimidityConfig(void)
-{
-}
+// void I_InitTimidityConfig(void)
+// {
+// }
 
-#endif
+// #endif
 
 /*---------------------------------------------------------------------*
  *  eof                                                                *

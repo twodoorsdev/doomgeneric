@@ -16,8 +16,10 @@
 //
 
 
-
+#ifndef __APPLE__
 #include <stdlib.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
 
@@ -53,6 +55,8 @@
 
 #ifdef __MACOSX__
 #include <CoreFoundation/CFUserNotification.h>
+#elif __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 #define DEFAULT_RAM 6 /* MiB */
@@ -264,7 +268,7 @@ void I_Quit (void)
 #endif
 }
 
-#if !defined(_WIN32) && !defined(__MACOSX__) && !defined(__DJGPP__)
+#if !defined(_WIN32) && !defined(__APPLE__) && !defined(__DJGPP__)
 #define ZENITY_BINARY "/usr/bin/zenity"
 
 // returns non-zero if zenity is available
@@ -347,7 +351,7 @@ static int ZenityErrorBox(char *message)
     return result;
 }
 
-#endif /* !defined(_WIN32) && !defined(__MACOSX__) && !defined(__DJGPP__) */
+#endif /* !defined(_WIN32) && !defined(__APPLE__) && !defined(__DJGPP__) */
 
 
 //
@@ -447,6 +451,49 @@ void I_Error (char *error, ...)
                                         CFSTR(PACKAGE_STRING),
                                         message,
                                         NULL);
+    }
+#elif defined(__APPLE__)
+    {
+        int i;
+        char* processedMsg = strdup(msgbuf);  // Create a copy of the message
+
+        // Replace newlines with spaces, just like in the original
+        for (i = 0; processedMsg[i] != '\0'; ++i) {
+            if (processedMsg[i] == '\n') {
+                processedMsg[i] = ' ';
+            }
+        }
+
+        // Create the notification content dictionary
+        CFMutableDictionaryRef notificationDict = CFDictionaryCreateMutable(
+            kCFAllocatorDefault,
+            0,
+            &kCFTypeDictionaryKeyCallBacks,
+            &kCFTypeDictionaryValueCallBacks
+        );
+
+        // Create message string
+        CFStringRef message = CFStringCreateWithCString(NULL,
+                                                      processedMsg,
+                                                      kCFStringEncodingUTF8);
+
+        // Create notification request
+        CFNotificationCenterRef center = CFNotificationCenterGetLocalCenter();
+        
+        if (center) {
+            CFNotificationCenterPostNotification(
+                center,
+                CFSTR("LocalAlertNotification"),
+                message,
+                notificationDict,
+                true
+            );
+        }
+
+        // Clean up
+        CFRelease(message);
+        CFRelease(notificationDict);
+        free(processedMsg);
     }
 #elif defined(__DJGPP__)
     {
