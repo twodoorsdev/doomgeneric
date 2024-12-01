@@ -10,6 +10,8 @@
 #include <stdbool.h>
 #include <SDL3/SDL.h>
 
+#include <CoreFoundation/CoreFoundation.h>
+
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 SDL_Texture* texture;
@@ -197,6 +199,29 @@ void DG_SetWindowTitle(const char * title)
 
 int main(int argc, char **argv)
 {
+    CFBundleRef mb = CFBundleGetMainBundle();
+    CFURLRef ur = CFBundleCopyResourceURL(mb, CFSTR("doom1"), CFSTR("wad"), NULL);
+//    CFStringRef imagePath = CFURLCopyFileSystemPath(ur, kCFURLPOSIXPathStyle);
+    
+    CFShow(ur);
+
+//    // Now convert to a C-string
+//    CFStringEncoding encoding = kCFStringEncodingUTF8;
+//    CFIndex length = CFStringGetLength(imagePath);
+//    CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, encoding);
+//
+//    char *filename = (char *)malloc(maxSize + 1); // +1 for \0
+
+    // Technically this can fail, but it really, really can't.
+//    CFStringGetCString(imagePath, filename, maxSize, encoding);
+//
+//    printf( "\n we did it! .. %s \n", filename );
+
+    // Cleanup
+//    free(filename); filename = NULL;
+//    CFRelease(imagePath); imagePath = NULL;
+    CFRelease(ur); ur = NULL;
+    
     doomgeneric_Create(argc, argv);
 
     for (int i = 0; ; i++)
