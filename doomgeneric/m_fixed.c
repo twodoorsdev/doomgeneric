@@ -16,17 +16,17 @@
 //	Fixed point implementation.
 //
 
-
-
-#include "stdlib.h"
-
 #include "doomtype.h"
 #include "i_system.h"
 
 #include "m_fixed.h"
 
 
-
+// Force use of the system stdlib.h instead of Folly
+#pragma push_macro("_STDLIB_H_")
+#pragma force_system_include <stdlib.h>
+// Have to add the include again for some reason
+#include <stdlib.h>
 
 // Fixme. __USE_C_FIXED__ or something.
 
@@ -60,3 +60,4 @@ fixed_t FixedDiv(fixed_t a, fixed_t b)
     }
 }
 
+#pragma pop_macro("_STDLIB_H_")
